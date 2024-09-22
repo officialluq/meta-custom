@@ -1,0 +1,491 @@
+diff --git a/arch/arm/dts/imx8mp-evk-u-boot.dtsi b/arch/arm/dts/imx8mp-evk-u-boot.dtsi
+index 445f45214b0..c9f5461324b 100644
+--- a/arch/arm/dts/imx8mp-evk-u-boot.dtsi
++++ b/arch/arm/dts/imx8mp-evk-u-boot.dtsi
+@@ -175,27 +175,27 @@
+ 	bootph-pre-ram;
+ };
+ 
+-&ethphy0 {
+-	reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
+-	reset-assert-us = <15000>;
+-	reset-deassert-us = <100000>;
+-};
+-
+-&fec {
+-	phy-reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
+-	phy-reset-duration = <15>;
+-	phy-reset-post-delay = <100>;
+-};
++// &ethphy0 {
++// 	reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
++// 	reset-assert-us = <15000>;
++// 	reset-deassert-us = <100000>;
++// };
++
++// &fec {
++// 	phy-reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
++// 	phy-reset-duration = <15>;
++// 	phy-reset-post-delay = <100>;
++// };
+ 
+ &flexspi {
+ 	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_400M>;
+ };
+ 
+-&mipi_dsi {
+-	/delete-property/ assigned-clocks;
+-	/delete-property/ assigned-clock-parents;
+-	/delete-property/ assigned-clock-rates;
+-};
++// &mipi_dsi {
++// 	/delete-property/ assigned-clocks;
++// 	/delete-property/ assigned-clock-parents;
++// 	/delete-property/ assigned-clock-rates;
++// };
+ 
+ &media_blk_ctrl {
+ 	assigned-clock-rates = <500000000>, <200000000>;
+diff --git a/arch/arm/dts/imx8mp-evk.dts b/arch/arm/dts/imx8mp-evk.dts
+index 36b860125e0..e985ca3f53b 100644
+--- a/arch/arm/dts/imx8mp-evk.dts
++++ b/arch/arm/dts/imx8mp-evk.dts
+@@ -86,31 +86,31 @@
+ 		enable-active-high;
+ 	};
+ 
+-	dsi_host: dsi-host {
+-		compatible = "samsung,sec-mipi-dsi";
+-		status = "okay";
+-	};
+-
+-	rm67199_panel {
+-		compatible = "raydium,rm67199";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_mipi_dsi_en>;
+-		reset-gpio = <&gpio1 8 GPIO_ACTIVE_LOW>;
+-		dsi-lanes = <4>;
+-		video-mode = <2>;	/* 0: burst mode
+-					 * 1: non-burst mode with sync event
+-					 * 2: non-burst mode with sync pulse
+-					 */
+-		panel-width-mm = <68>;
+-		panel-height-mm = <121>;
+-		status = "okay";
+-
+-		port {
+-			rm67191_from_dsim: endpoint {
+-				remote-endpoint = <&dsim_to_rm67191>;
+-			};
+-		};
+-	};
++	// dsi_host: dsi-host {
++	// 	compatible = "samsung,sec-mipi-dsi";
++	// 	status = "okay";
++	// };
++
++	// rm67199_panel {
++	// 	compatible = "raydium,rm67199";
++	// 	pinctrl-names = "default";
++	// 	pinctrl-0 = <&pinctrl_mipi_dsi_en>;
++	// 	reset-gpio = <&gpio1 8 GPIO_ACTIVE_LOW>;
++	// 	dsi-lanes = <4>;
++	// 	video-mode = <2>;	/* 0: burst mode
++	// 				 * 1: non-burst mode with sync event
++	// 				 * 2: non-burst mode with sync pulse
++	// 				 */
++	// 	panel-width-mm = <68>;
++	// 	panel-height-mm = <121>;
++	// 	status = "okay";
++
++	// 	port {
++	// 		rm67191_from_dsim: endpoint {
++	// 			remote-endpoint = <&dsim_to_rm67191>;
++	// 		};
++	// 	};
++	// };
+ 
+ 	cbtl04gp {
+ 		compatible = "nxp,cbtl04gp";
+@@ -159,137 +159,137 @@
+ 	cpu-supply = <&buck2>;
+ };
+ 
+-&eqos {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_eqos>;
+-	phy-mode = "rgmii-id";
+-	phy-handle = <&ethphy0>;
+-	snps,force_thresh_dma_mode;
+-	snps,mtl-tx-config = <&mtl_tx_setup>;
+-	snps,mtl-rx-config = <&mtl_rx_setup>;
+-	status = "okay";
+-
+-	mdio {
+-		compatible = "snps,dwmac-mdio";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		ethphy0: ethernet-phy@1 {
+-			compatible = "ethernet-phy-ieee802.3-c22";
+-			reg = <1>;
+-			eee-broken-1000t;
+-			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
+-			reset-assert-us = <10000>;
+-			reset-deassert-us = <80000>;
+-			realtek,clkout-disable;
+-		};
+-	};
+-
+-	mtl_tx_setup: tx-queues-config {
+-		snps,tx-queues-to-use = <5>;
+-		snps,tx-sched-sp;
+-
+-		queue0 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x1>;
+-		};
+-
+-		queue1 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x2>;
+-		};
+-
+-		queue2 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x4>;
+-		};
+-
+-		queue3 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x8>;
+-		};
+-
+-		queue4 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0xf0>;
+-		};
+-	};
+-
+-	mtl_rx_setup: rx-queues-config {
+-		snps,rx-queues-to-use = <5>;
+-		snps,rx-sched-sp;
+-
+-		queue0 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x1>;
+-			snps,map-to-dma-channel = <0>;
+-		};
+-
+-		queue1 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x2>;
+-			snps,map-to-dma-channel = <1>;
+-		};
+-
+-		queue2 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x4>;
+-			snps,map-to-dma-channel = <2>;
+-		};
+-
+-		queue3 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0x8>;
+-			snps,map-to-dma-channel = <3>;
+-		};
+-
+-		queue4 {
+-			snps,dcb-algorithm;
+-			snps,priority = <0xf0>;
+-			snps,map-to-dma-channel = <4>;
+-		};
+-	};
+-};
+-
+-&fec {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_fec>;
+-	phy-mode = "rgmii-id";
+-	phy-handle = <&ethphy1>;
+-	fsl,magic-packet;
+-	status = "okay";
+-
+-	mdio {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		ethphy1: ethernet-phy@1 {
+-			compatible = "ethernet-phy-ieee802.3-c22";
+-			reg = <1>;
+-			eee-broken-1000t;
+-			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
+-			reset-assert-us = <10000>;
+-			reset-deassert-us = <80000>;
+-			realtek,aldps-enable;
+-			realtek,clkout-disable;
+-		};
+-	};
+-};
+-
+-&flexcan1 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_flexcan1>;
+-	xceiver-supply = <&reg_can1_stby>;
+-	status = "okay";
+-};
+-
+-&flexcan2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_flexcan2>;
+-	xceiver-supply = <&reg_can2_stby>;
+-	pinctrl-assert-gpios = <&pca6416 3 GPIO_ACTIVE_HIGH>;
+-	status = "disabled";/* can2 pin conflict with pdm */
+-};
++// &eqos {
++// 	pinctrl-names = "default";
++// 	pinctrl-0 = <&pinctrl_eqos>;
++// 	phy-mode = "rgmii-id";
++// 	phy-handle = <&ethphy0>;
++// 	snps,force_thresh_dma_mode;
++// 	snps,mtl-tx-config = <&mtl_tx_setup>;
++// 	snps,mtl-rx-config = <&mtl_rx_setup>;
++// 	status = "okay";
++
++// 	mdio {
++// 		compatible = "snps,dwmac-mdio";
++// 		#address-cells = <1>;
++// 		#size-cells = <0>;
++
++// 		ethphy0: ethernet-phy@1 {
++// 			compatible = "ethernet-phy-ieee802.3-c22";
++// 			reg = <1>;
++// 			eee-broken-1000t;
++// 			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
++// 			reset-assert-us = <10000>;
++// 			reset-deassert-us = <80000>;
++// 			realtek,clkout-disable;
++// 		};
++// 	};
++
++// 	mtl_tx_setup: tx-queues-config {
++// 		snps,tx-queues-to-use = <5>;
++// 		snps,tx-sched-sp;
++
++// 		queue0 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x1>;
++// 		};
++
++// 		queue1 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x2>;
++// 		};
++
++// 		queue2 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x4>;
++// 		};
++
++// 		queue3 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x8>;
++// 		};
++
++// 		queue4 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0xf0>;
++// 		};
++// 	};
++
++// 	mtl_rx_setup: rx-queues-config {
++// 		snps,rx-queues-to-use = <5>;
++// 		snps,rx-sched-sp;
++
++// 		queue0 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x1>;
++// 			snps,map-to-dma-channel = <0>;
++// 		};
++
++// 		queue1 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x2>;
++// 			snps,map-to-dma-channel = <1>;
++// 		};
++
++// 		queue2 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x4>;
++// 			snps,map-to-dma-channel = <2>;
++// 		};
++
++// 		queue3 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0x8>;
++// 			snps,map-to-dma-channel = <3>;
++// 		};
++
++// 		queue4 {
++// 			snps,dcb-algorithm;
++// 			snps,priority = <0xf0>;
++// 			snps,map-to-dma-channel = <4>;
++// 		};
++// 	};
++// };
++
++// &fec {
++// 	pinctrl-names = "default";
++// 	pinctrl-0 = <&pinctrl_fec>;
++// 	phy-mode = "rgmii-id";
++// 	phy-handle = <&ethphy1>;
++// 	fsl,magic-packet;
++// 	status = "okay";
++
++// 	mdio {
++// 		#address-cells = <1>;
++// 		#size-cells = <0>;
++
++// 		ethphy1: ethernet-phy@1 {
++// 			compatible = "ethernet-phy-ieee802.3-c22";
++// 			reg = <1>;
++// 			eee-broken-1000t;
++// 			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
++// 			reset-assert-us = <10000>;
++// 			reset-deassert-us = <80000>;
++// 			realtek,aldps-enable;
++// 			realtek,clkout-disable;
++// 		};
++// 	};
++// };
++
++// &flexcan1 {
++// 	pinctrl-names = "default";
++// 	pinctrl-0 = <&pinctrl_flexcan1>;
++// 	xceiver-supply = <&reg_can1_stby>;
++// 	status = "okay";
++// };
++
++// &flexcan2 {
++// 	pinctrl-names = "default";
++// 	pinctrl-0 = <&pinctrl_flexcan2>;
++// 	xceiver-supply = <&reg_can2_stby>;
++// 	pinctrl-assert-gpios = <&pca6416 3 GPIO_ACTIVE_HIGH>;
++// 	status = "disabled";/* can2 pin conflict with pdm */
++// };
+ 
+ &i2c1 {
+ 	clock-frequency = <400000>;
+@@ -405,19 +405,19 @@
+ 	sda-gpios = <&gpio5 17 GPIO_ACTIVE_HIGH>;
+ 	status = "okay";
+ 
+-	adv_bridge: adv7535@3d {
+-		compatible = "adi,adv7535";
+-		reg = <0x3d>;
+-		adi,addr-cec = <0x3c>;
+-		adi,dsi-lanes = <4>;
+-		status = "okay";
++	// adv_bridge: adv7535@3d {
++	// 	compatible = "adi,adv7535";
++	// 	reg = <0x3d>;
++	// 	adi,addr-cec = <0x3c>;
++	// 	adi,dsi-lanes = <4>;
++	// 	status = "okay";
+ 
+-		port {
+-			adv7535_from_dsim: endpoint {
+-				remote-endpoint = <&dsim_to_adv7535>;
+-			};
+-		};
+-	};
++	// 	port {
++	// 		adv7535_from_dsim: endpoint {
++	// 			remote-endpoint = <&dsim_to_adv7535>;
++	// 		};
++	// 	};
++	// };
+ 
+ 	ptn5110: tcpc@50 {
+ 		compatible = "nxp,ptn5110";
+@@ -514,27 +514,27 @@
+ 	 */
+ };
+ 
+-&lcdif1 {
+-	status = "okay";
+-};
+-
+-&mipi_dsi {
+-	status = "okay";
+-
+-	ports {
+-		port@1 {
+-			dsim_to_adv7535: endpoint {
+-				remote-endpoint = <&adv7535_from_dsim>;
+-			};
+-		};
+-
+-		port@2 {
+-			dsim_to_rm67191: endpoint {
+-				remote-endpoint = <&rm67191_from_dsim>;
+-			};
+-		};
+-	};
+-};
++// &lcdif1 {
++// 	status = "okay";
++// };
++
++// &mipi_dsi {
++// 	status = "okay";
++
++// 	ports {
++// 		port@1 {
++// 			dsim_to_adv7535: endpoint {
++// 				remote-endpoint = <&adv7535_from_dsim>;
++// 			};
++// 		};
++
++// 		port@2 {
++// 			dsim_to_rm67191: endpoint {
++// 				remote-endpoint = <&rm67191_from_dsim>;
++// 			};
++// 		};
++// 	};
++// };
+ 
+ &pcie_phy {
+ 	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
+diff --git a/configs/imx8mp_evk_defconfig b/configs/imx8mp_evk_defconfig
+index 7112fdf5859..008209e7442 100644
+--- a/configs/imx8mp_evk_defconfig
++++ b/configs/imx8mp_evk_defconfig
+@@ -25,7 +25,7 @@ CONFIG_SYS_LOAD_ADDR=0x40400000
+ CONFIG_DISTRO_DEFAULTS=y
+ CONFIG_SYS_MONITOR_LEN=524288
+ CONFIG_DEFAULT_DEVICE_TREE="imx8mp-evk"
+-CONFIG_BOOTCOMMAND="run sr_ir_v2_cmd;run distro_bootcmd;run bsp_bootcmd"
++CONFIG_BOOTCOMMAND="run bsp_bootcmd"
+ CONFIG_FIT=y
+ CONFIG_FIT_EXTERNAL_OFFSET=0x3000
+ CONFIG_SPL_LOAD_FIT=y
+@@ -209,3 +209,4 @@ CONFIG_TEE=y
+ CONFIG_EFI_ESRT=y
+ CONFIG_EFI_HAVE_CAPSULE_UPDATE=y
+ CONFIG_FIT_SIGNATURE=y
++CONFIG_BOOTDELAY=0
+\ No newline at end of file
+diff --git a/include/configs/imx8mp_evk.h b/include/configs/imx8mp_evk.h
+index 9d34c54d66d..679426746f1 100644
+--- a/include/configs/imx8mp_evk.h
++++ b/include/configs/imx8mp_evk.h
+@@ -105,7 +105,7 @@
+ 	"mmcpart=1\0" \
+ 	"mmcroot=/dev/mmcblk1p2 rootwait rw\0" \
+ 	"mmcautodetect=yes\0" \
+-	"mmcargs=setenv bootargs ${jh_clk} ${mcore_clk} console=${console} root=${mmcroot}\0 " \
++	"mmcargs=setenv bootargs ${jh_clk} ${mcore_clk} quiet loglevel=0 vt.global_cursor_default=0 root=${mmcroot}\0 " \
+ 	"loadbootscript=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${bsp_script};\0" \
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+ 		"source\0" \
